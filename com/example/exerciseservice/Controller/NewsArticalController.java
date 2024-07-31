@@ -1,5 +1,6 @@
 package com.example.exerciseservice.Controller;
 
+import com.example.exerciseservice.ApiResponse.ApiResponse;
 import com.example.exerciseservice.Model.NewsArticale;
 import com.example.exerciseservice.Service.NewsArticaleService;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ public class NewsArticalController {
             return ResponseEntity.status(400).body(message);
         }
         newsArticaleService.addNewsArticale(newsArticale);
-        return ResponseEntity.status(200).body("News Article added");
+        return ResponseEntity.status(200).body(new ApiResponse("newsArticle added successfully"));
     }
 
     @PutMapping("/update-newsarticale/{id}")
@@ -42,18 +43,18 @@ public class NewsArticalController {
         }
         boolean isUpdated = newsArticaleService.updateNewsArticale(id, newsArticale);
         if(isUpdated){
-            return ResponseEntity.status(200).body("News Article updated");
+            return ResponseEntity.status(200).body(new ApiResponse("newsArticle updated successfully"));
         }
-        return ResponseEntity.status(400).body("ID not found");
+        return ResponseEntity.status(400).body(new ApiResponse("newsArticle update failed"));
     }
 
     @DeleteMapping("/del-newsarticale/{id}")
     public ResponseEntity deleteNewsArticale(@PathVariable int id){
         boolean isDeleted = newsArticaleService.deleteNewsArticale(id);
         if(isDeleted){
-            return ResponseEntity.status(200).body("News Article deleted");
+            return ResponseEntity.status(200).body(new ApiResponse("Deleted News Article Successfully"));
         }
-        return ResponseEntity.status(400).body("ID not found");
+        return ResponseEntity.status(400).body(new ApiResponse("Id Not Found"));
     }
 
     @PutMapping("/publish/{id}")
@@ -62,13 +63,13 @@ public class NewsArticalController {
         if(isPublished){
             return ResponseEntity.status(200).body("News Article published");
         }
-        return ResponseEntity.status(400).body("ID not found");
+        return ResponseEntity.status(400).body(new ApiResponse("News Article not published"));
     }
 
     @GetMapping("/get-published")
     public ResponseEntity getPublishedNews(){
         if (newsArticaleService.getPublishedNewsArticles()==null){
-            return ResponseEntity.status(400).body("No published News Article found");
+            return ResponseEntity.status(400).body(new ApiResponse("No published news article found"));
         }
         return ResponseEntity.status(200).body(newsArticaleService.getPublishedNewsArticles());
     }
@@ -77,7 +78,7 @@ public class NewsArticalController {
     public ResponseEntity getByCategory(@PathVariable String category){
 //        ArrayList<NewsArticale>  n = newsArticaleService.getByCategory(category);
         if (newsArticaleService.getByCategory(category)==null){
-            return ResponseEntity.status(400).body("No News Article found");
+            return ResponseEntity.status(400).body(new ApiResponse("Category not found"));
         }
         return ResponseEntity.status(200).body(newsArticaleService.getByCategory(category));
     }
